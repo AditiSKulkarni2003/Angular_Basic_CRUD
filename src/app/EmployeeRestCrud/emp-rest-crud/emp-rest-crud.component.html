@@ -1,0 +1,89 @@
+<!-- Employee Table -->
+<table>
+  <thead>
+  <tr>
+    <th>ID</th>
+    <th>Name</th>
+    <th>Company</th>
+    <th>Blood Group</th>
+    <th>GCM Level</th>
+    <th>DASS ID</th>
+    <th>Type</th>
+    <th>Actions</th>
+  </tr>
+  </thead>
+  <tbody>
+  <tr *ngFor="let employee of employees">
+    <td>{{ employee.empId }}</td>
+    <td>{{ employee.empName }}</td>
+    <td>{{ employee.empCompanyName }}</td>
+    <td>{{ employee.empBloodGroup }}</td>
+    <td>{{ employee.gcmLevel }}</td>
+    <td>{{ employee.dassId }}</td>
+    <td>{{ employee.empType }}</td>
+    <td>
+      <button (click)="selectEmployee(employee)">Edit</button>
+      <button (click)="deleteEmployee(employee.empId!)">Delete</button>
+    </td>
+  </tr>
+  </tbody>
+</table>
+
+<!-- Add Employee Button -->
+<button class="add-employee-button" (click)="toggleForm()">Add Employee</button>
+
+<!-- Employee Form -->
+<form *ngIf="showForm" (ngSubmit)="isEditMode ? updateEmployee() : createEmployee()">
+  <label for="empName">Name:</label>
+  <input id="empName" [(ngModel)]="employee.empName" name="empName" required>
+
+  <label for="empCompanyName">Company Name:</label>
+  <input id="empCompanyName" [(ngModel)]="employee.empCompanyName" name="empCompanyName" required>
+
+  <label for="empBloodGroup">Blood Group:</label>
+  <input id="empBloodGroup" [(ngModel)]="employee.empBloodGroup" name="empBloodGroup" required>
+
+  <label for="gcmLevel">GCM Level:</label>
+  <input id="gcmLevel" [(ngModel)]="employee.gcmLevel" name="gcmLevel" required>
+
+  <label for="dassId">DASS ID:</label>
+  <input id="dassId" [(ngModel)]="employee.dassId" name="dassId" required>
+
+  <label for="empType">Employee Type:</label>
+  <select id="empType" [(ngModel)]="employee.empType" name="empType" required>
+    <option value="ConsultantDelivery">ConsultantDelivery</option>
+    <option value="Manager">Manager</option>
+    <option value="AssociateConsultantDelivery">AssociateConsultantDelivery</option>
+  </select>
+
+  <!-- Conditional fields based on employee type -->
+  <div *ngIf="isConsultantDelivery(employee)">
+    <label for="consultingLevel">Consulting Level:</label>
+    <input id="consultingLevel" [(ngModel)]="employee.consultingLevel" name="consultingLevel" required >
+
+    <label for="leadProjects">Lead Projects:</label>
+    <input id="leadProjects" [(ngModel)]="employee.leadProjects" name="leadProjects" required>
+  </div>
+
+  <div *ngIf="isManager(employee)">
+    <label for="teamSize">Team Size:</label>
+    <input id="teamSize" [(ngModel)]="employee.teamSize" name="teamSize" required >
+
+    <label for="location">Location:</label>
+    <input id="location" [(ngModel)]="employee.location" name="location" required>
+  </div>
+
+  <div *ngIf="isAssociateConsultantDelivery(employee)">
+    <label for="skillSet">Skill Set:</label>
+    <input id="skillSet" [(ngModel)]="employee.skillSet" name="skillSet" required>
+
+    <label for="projectRole">Project Role:</label>
+    <input id="projectRole" [(ngModel)]="employee.projectRole" name="projectRole" required>
+
+    <label for="reportsTo">Reports To:</label>
+    <input id="reportsTo" [(ngModel)]="employee.reportsTo" name="reportsTo" required>
+  </div>
+
+  <button type="submit">{{ isEditMode ? 'Update' : 'Create' }}</button>
+  <button type="button" (click)="resetForm()">Reset</button>
+</form>
